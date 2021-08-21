@@ -15,7 +15,20 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from api import views
+from rest_framework_jwt.views import ObtainJSONWebToken, RefreshJSONWebToken, VerifyJSONWebToken, obtain_jwt_token
+# 基类: JSONWebTokenAPIView, 继承于APIView
+# ObtainJSONWebToken, RefreshJSONWebToken, VerifyJSONWebToken都继承于JSONWebTokenAPIView
+'''
+源码中:
+obtain_jwt_token = ObtainJSONWebToken.as_view()
+refresh_jwt_token = RefreshJSONWebToken.as_view()
+verify_jwt_token = VerifyJSONWebToken.as_view()
+'''
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    # url(r'^login/', ObtainJSONWebToken.as_view()),
+    url(r'^login/', obtain_jwt_token),
+    url(r'^books/', views.BookView.as_view()),
 ]
