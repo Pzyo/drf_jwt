@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from utils.auth import MyToken
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_jwt.utils import jwt_response_payload_handler
 
 class BookView(APIView):
     authentication_classes = [JSONWebTokenAuthentication,]
@@ -33,3 +34,23 @@ class RegisterView(GenericViewSet, CreateModelMixin, RetrieveModelMixin, UpdateM
             return UserReadonlyModelSerializer
         elif self.action == 'update':
             return UserImageModelSerializer
+
+
+# 手动签发token, 支持多方式登录
+
+from rest_framework.viewsets import ViewSetMixin, ViewSet
+from api import ser
+
+# class Login2View(ViewSetMixin,APIView):
+class Login2View(ViewSet):
+    # 这是登录接口
+    def login(self, request, *args, **kwargs):
+        # 1. 需要有一个序列化的类
+        # 2. 生成序列化类对象
+        login_ser = ser.LoginModelSerializer(data=request.data)
+        # 3. 调用序列化类对象的is_vaildad
+        login_ser.is_valid(raise_exception=True)
+        token = login_ser.context.get('token')
+        username = login_ser.context.get('username')
+        # 4. return
+        return Response({'status':100, 'msg':'登录成功', 'token':token, 'username':username})

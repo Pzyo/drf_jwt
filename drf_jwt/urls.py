@@ -42,7 +42,9 @@ urlpatterns = [
 
     url(r'^books/', views.BookView.as_view()),
     # url(r'^register/', views.RegisterView.as_view(actions={'post':'create'})),
-    url('', include(routers.urls))  # 方式2
+    url('', include(routers.urls)),  # 方式2
+
+    url(r'^login2/', views.Login2View.as_view(actions={'post':'login'})),
 ]
 
 # urlpatterns += routers.urls # 方式1

@@ -128,3 +128,9 @@ AUTH_USER_MODEL = 'api.user'
 # 配置头像
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+import datetime
+JWT_AUTH = {
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'utils.auth.my_jwt_response_payload_handler',
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7), # 过期时间
+}
