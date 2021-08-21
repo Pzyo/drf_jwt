@@ -13,7 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
 from api import views
 from rest_framework_jwt.views import ObtainJSONWebToken, RefreshJSONWebToken, VerifyJSONWebToken, obtain_jwt_token
@@ -26,9 +26,23 @@ refresh_jwt_token = RefreshJSONWebToken.as_view()
 verify_jwt_token = VerifyJSONWebToken.as_view()
 '''
 
+from rest_framework.routers import SimpleRouter
+routers = SimpleRouter()
+routers.register('register', views.RegisterView, basename='register')
+
+from django.views.static import serve  # django内置的视图函数FBV
+from django.conf import settings
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     # url(r'^login/', ObtainJSONWebToken.as_view()),
     url(r'^login/', obtain_jwt_token),
+    # 开放MEDIA文件夹
+    url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+
     url(r'^books/', views.BookView.as_view()),
+    # url(r'^register/', views.RegisterView.as_view(actions={'post':'create'})),
+    url('', include(routers.urls))  # 方式2
 ]
+
+# urlpatterns += routers.urls # 方式1
