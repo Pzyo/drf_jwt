@@ -45,6 +45,8 @@ urlpatterns = [
     url('', include(routers.urls)),  # 方式2
 
     url(r'^login2/', views.Login2View.as_view(actions={'post':'login'})),
+
+    url(r'^app01/', include('app01.urls'))
 ]
 
 # urlpatterns += routers.urls # 方式1
